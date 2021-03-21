@@ -3,14 +3,18 @@ package main
 import (
 	"encoding/json"
 	"flag"
-	"log"
+	"fmt"
 	"net/http"
+	"os"
 	"text/template"
+
+	log "github.com/sirupsen/logrus"
 )
 
 var (
-	addr        = flag.String("web.listen-address", ":9011", "Address on which to expose metrics and web interface.")
-	etherpadURL = flag.String("etherpad.url", "http://localhost:9001", "URL to connect with Etherpad")
+	addr             = flag.String("web.listen-address", ":9011", "Address on which to expose metrics and web interface.")
+	etherpadURL      = flag.String("etherpad.url", "http://localhost:9001", "URL to connect with Etherpad")
+	etherpadAPIToken = flag.String("etherpad.api-token", "", "API Token for Etherpad")
 )
 
 type etherpadStats struct {
@@ -22,6 +26,16 @@ type etherpadStats struct {
 	HttpRequests    httpRequests `json:"httpRequests"`
 	Connects        meter        `json:"connects"`
 	Edits           edits        `json:"edits"`
+}
+
+type etherpadAPIStats struct {
+	Code    int    `json:"code"`
+	Message string `json:"message"`
+	Data    struct {
+		TotalPads       int `json:"totalPads"`
+		TotalSessions   int `json:"totalSessions"`
+		TotalActivePads int `json:"totalActivePads"`
+	} `json:"data"`
 }
 
 type httpRequests struct {
@@ -58,7 +72,7 @@ type histogram struct {
 	P999     float64 `json:"p999"`
 }
 
-var tpl = template.Must(template.New("stats").Parse(`# HELP etherpad_memory_usage
+var statsTpl = template.Must(template.New("stats").Parse(`# HELP etherpad_memory_usage
 # TYPE etherpad_memory_usage gauge
 etherpad_memory_usage{type="total"} {{.MemoryUsage}}
 etherpad_memory_usage{type="heap"} {{.MemoryUsageHeap}}
@@ -79,43 +93,76 @@ etherpad_connects {{.Connects.Count}}
 etherpad_connects {{.Edits.Meter.Count}}
 `))
 
+var apiStatsTpl = template.Must(template.New("apiStats").Parse(`# HELP etherpad_total_pads
+# TYPE etherpad_total_pads gauge
+etherpad_total_pads {{.Data.TotalPads}}
+# HELP etherpad_total_sessions
+# TYPE etherpad_total_sessions gauge
+etherpad_total_sessions {{.Data.TotalSessions}}
+# HELP etherpad_total_active_pads
+# TYPE etherpad_total_active_pads gauge
+etherpad_total_active_pads {{.Data.TotalActivePads}}
+`))
+
 type handler struct {
-	etherpadURL string
+	etherpadURL      string
+	etherpadAPIToken string
 }
 
 func (h handler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
-	resp, err := http.Get(h.etherpadURL + "/stats")
+	res, err := http.Get(h.etherpadURL + "/stats")
 	if err != nil {
-		log.Printf("scrape error: %v", err)
+		log.WithError(err).Error("error while fetching /stats from etherpad")
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	defer resp.Body.Close()
+	defer res.Body.Close()
 
 	var stats etherpadStats
-	if err := json.NewDecoder(resp.Body).Decode(&stats); err != nil {
-		log.Printf("json decoding error: %v", err)
+	if err := json.NewDecoder(res.Body).Decode(&stats); err != nil {
+		log.WithError(err).Error("error while decoding json")
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
+	}
+
+	if h.etherpadAPIToken != "" {
+		res, err := http.Get(h.etherpadURL + fmt.Sprintf("/api/1.2.14/getStats?apikey=%s", h.etherpadAPIToken))
+		if err != nil {
+			log.WithError(err).Error("error while fetching /getStats from etherpad api")
+		}
+		defer res.Body.Close()
+
+		var apiStats etherpadAPIStats
+		if err := json.NewDecoder(res.Body).Decode(&apiStats); err != nil {
+			log.WithError(err).Error("error while decoding json")
+		}
+
+		err = apiStatsTpl.Execute(w, &apiStats)
+		if err != nil {
+			log.WithError(err).Error("error while executing template for apiStats")
+		}
 	}
 
 	w.Header().Set("Content-Type", "text/plain")
-	err = tpl.Execute(w, &stats)
+	err = statsTpl.Execute(w, &stats)
 	if err != nil {
-		log.Printf("template error: %v", err)
+		log.WithError(err).Error("error while executing template for stats")
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 }
 
+func init() {
+	log.SetFormatter(&log.JSONFormatter{})
+	log.SetOutput(os.Stdout)
+}
+
 func main() {
-	log.SetFlags(0)
 	flag.Parse()
 
-	http.Handle("/metrics", handler{etherpadURL: *etherpadURL})
+	log.Info("Started Etherpad Metrics Exporter")
+	http.Handle("/metrics", handler{etherpadURL: *etherpadURL, etherpadAPIToken: *etherpadAPIToken})
 	if err := http.ListenAndServe(*addr, nil); err != nil {
-		log.Fatal(err)
+		log.WithError(err).Error("error while try to start exporter")
 	}
-
-	log.Println("Started Etherpad Metrics Exporter")
 }
