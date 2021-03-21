@@ -41,7 +41,7 @@ etherpad_http_requests 15
 etherpad_connects 1
 # HELP etherpad_edits
 # TYPE etherpad_edits gauge
-etherpad_connects 3
+etherpad_edits 3
 `,
 		},
 	}

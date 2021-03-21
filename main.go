@@ -90,7 +90,7 @@ etherpad_http_requests {{.HttpRequests.Meter.Count}}
 etherpad_connects {{.Connects.Count}}
 # HELP etherpad_edits
 # TYPE etherpad_edits gauge
-etherpad_connects {{.Edits.Meter.Count}}
+etherpad_edits {{.Edits.Meter.Count}}
 `))
 
 var apiStatsTpl = template.Must(template.New("apiStats").Parse(`# HELP etherpad_total_pads

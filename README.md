@@ -58,7 +58,7 @@ etherpad_http_requests 92
 etherpad_connects 1
 # HELP etherpad_edits
 # TYPE etherpad_edits gauge
-etherpad_connects 3
+etherpad_edits 3
 ```
 
 ## License
