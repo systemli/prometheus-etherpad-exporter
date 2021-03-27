@@ -56,9 +56,38 @@ etherpad_http_requests 92
 # HELP etherpad_connects
 # TYPE etherpad_connects gauge
 etherpad_connects 1
+# HELP etherpad_disconnects
+# TYPE etherpad_disconnects gauge
+etherpad_connects 0
 # HELP etherpad_edits
 # TYPE etherpad_edits gauge
 etherpad_edits 3
+# HELP etherpad_failed_changesets
+# TYPE etherpad_failed_changesets gauge
+etherpad_failed_changesets 0
+# HELP etherpad_ueberdb_locks
+# TYPE etherpad_ueberdb_locks gauge
+etherpad_ueberdb_locks{state="awaits"} 0
+etherpad_ueberdb_locks{state="acquires"} 0
+etherpad_ueberdb_locks{state="releases"} 0
+# HELP etherpad_ueberdb_reads
+# TYPE etherpad_ueberdb_reads gauge
+etherpad_ueberdb_reads 0
+etherpad_ueberdb_reads{state="failed"} 0
+etherpad_ueberdb_reads{state="finished"} 0
+etherpad_ueberdb_reads{state="from_cache"} 0
+etherpad_ueberdb_reads{state="from_db"} 0
+etherpad_ueberdb_reads{state="from_db_failed"} 0
+etherpad_ueberdb_reads{state="from_db_finished"} 0
+# HELP etherpad_ueberdb_writes
+# TYPE etherpad_ueberdb_writes gauge
+etherpad_ueberdb_writes 0
+etherpad_ueberdb_writes{state="failed"} 0
+etherpad_ueberdb_writes{state="finished"} 0
+etherpad_ueberdb_writes{state="obsoleted"} 0
+etherpad_ueberdb_writes{state="to_db"} 0
+etherpad_ueberdb_writes{state="to_db_failed"} 0
+etherpad_ueberdb_writes{state="to_db_finished"} 0
 ```
 
 ## License
