@@ -18,14 +18,31 @@ var (
 )
 
 type etherpadStats struct {
-	MemoryUsage     int          `json:"memoryUsage"`
-	MemoryUsageHeap int          `json:"memoryUsageHeap"`
-	TotalUsers      int          `json:"totalUsers"`
-	ActivePads      int          `json:"activePads"`
-	PendingEdits    int          `json:"pendingEdits"`
-	HttpRequests    httpRequests `json:"httpRequests"`
-	Connects        meter        `json:"connects"`
-	Edits           edits        `json:"edits"`
+	MemoryUsage                int          `json:"memoryUsage"`
+	MemoryUsageHeap            int          `json:"memoryUsageHeap"`
+	TotalUsers                 int          `json:"totalUsers"`
+	ActivePads                 int          `json:"activePads"`
+	PendingEdits               int          `json:"pendingEdits"`
+	HttpRequests               httpRequests `json:"httpRequests"`
+	Connects                   meter        `json:"connects"`
+	Edits                      edits        `json:"edits"`
+	UeberdbLockAwaits          int          `json:"ueberdb_lockAwaits"`
+	UeberdbLockAcquires        int          `json:"ueberdb_lockAcquires"`
+	UeberdbLockReleases        int          `json:"ueberdb_lockReleases"`
+	UeberdbReads               int          `json:"ueberdb_reads"`
+	UeberdbReadsFailed         int          `json:"ueberdb_readsFailed"`
+	UeberdbReadsFinished       int          `json:"ueberdb_readsFinished"`
+	UeberdbReadsFromCache      int          `json:"ueberdb_readsFromCache"`
+	UeberdbReadsFromDb         int          `json:"ueberdb_readsFromDb"`
+	UeberdbReadsFromDbFailed   int          `json:"ueberdb_readsFromDbFailed"`
+	UeberdbReadsFromDbFinished int          `json:"ueberdb_readsFromDbFinished"`
+	UeberdbWrites              int          `json:"ueberdb_writes"`
+	UeberdbWritesFailed        int          `json:"ueberdb_writesFailed"`
+	UeberdbWritesFinished      int          `json:"ueberdb_writesFinished"`
+	UeberdbWritesObsoleted     int          `json:"ueberdb_writesObsoleted"`
+	UeberdbWritesToDb          int          `json:"ueberdb_writesToDb"`
+	UeberdbWritesToDbFailed    int          `json:"ueberdb_writesToDbFailed"`
+	UeberdbWritesToDbFinished  int          `json:"ueberdb_writesToDbFinished"`
 }
 
 type etherpadAPIStats struct {
@@ -91,6 +108,29 @@ etherpad_connects {{.Connects.Count}}
 # HELP etherpad_edits
 # TYPE etherpad_edits gauge
 etherpad_edits {{.Edits.Meter.Count}}
+# HELP etherpad_ueberdb_locks
+# TYPE etherpad_ueberdb_locks gauge
+etherpad_ueberdb_locks{state="awaits"} {{.UeberdbLockAwaits}}
+etherpad_ueberdb_locks{state="acquires"} {{.UeberdbLockAcquires}}
+etherpad_ueberdb_locks{state="releases"} {{.UeberdbLockReleases}}
+# HELP etherpad_ueberdb_reads
+# TYPE etherpad_ueberdb_reads gauge
+etherpad_ueberdb_reads {{.UeberdbReads}}
+etherpad_ueberdb_reads{state="failed"} {{.UeberdbReadsFailed}}
+etherpad_ueberdb_reads{state="finished"} {{.UeberdbReadsFinished}}
+etherpad_ueberdb_reads{state="from_cache"} {{.UeberdbReadsFromCache}}
+etherpad_ueberdb_reads{state="from_db"} {{.UeberdbReadsFromDb}}
+etherpad_ueberdb_reads{state="from_db_failed"} {{.UeberdbReadsFromDbFailed}}
+etherpad_ueberdb_reads{state="from_db_finished"} {{.UeberdbReadsFromDbFinished}}
+# HELP etherpad_ueberdb_writes
+# TYPE etherpad_ueberdb_writes gauge
+etherpad_ueberdb_writes {{.UeberdbWrites}}
+etherpad_ueberdb_writes{state="failed"} {{.UeberdbWritesFailed}}
+etherpad_ueberdb_writes{state="finished"} {{.UeberdbWritesFinished}}
+etherpad_ueberdb_writes{state="obsoleted"} {{.UeberdbWritesObsoleted}}
+etherpad_ueberdb_writes{state="to_db"} {{.UeberdbWritesToDb}}
+etherpad_ueberdb_writes{state="to_db_failed"} {{.UeberdbWritesToDbFailed}}
+etherpad_ueberdb_writes{state="to_db_finished"} {{.UeberdbWritesToDbFinished}}
 `))
 
 var apiStatsTpl = template.Must(template.New("apiStats").Parse(`# HELP etherpad_total_pads

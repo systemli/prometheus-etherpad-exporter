@@ -42,6 +42,75 @@ etherpad_connects 1
 # HELP etherpad_edits
 # TYPE etherpad_edits gauge
 etherpad_edits 3
+# HELP etherpad_ueberdb_locks
+# TYPE etherpad_ueberdb_locks gauge
+etherpad_ueberdb_locks{state="awaits"} 0
+etherpad_ueberdb_locks{state="acquires"} 0
+etherpad_ueberdb_locks{state="releases"} 0
+# HELP etherpad_ueberdb_reads
+# TYPE etherpad_ueberdb_reads gauge
+etherpad_ueberdb_reads 0
+etherpad_ueberdb_reads{state="failed"} 0
+etherpad_ueberdb_reads{state="finished"} 0
+etherpad_ueberdb_reads{state="from_cache"} 0
+etherpad_ueberdb_reads{state="from_db"} 0
+etherpad_ueberdb_reads{state="from_db_failed"} 0
+etherpad_ueberdb_reads{state="from_db_finished"} 0
+# HELP etherpad_ueberdb_writes
+# TYPE etherpad_ueberdb_writes gauge
+etherpad_ueberdb_writes 0
+etherpad_ueberdb_writes{state="failed"} 0
+etherpad_ueberdb_writes{state="finished"} 0
+etherpad_ueberdb_writes{state="obsoleted"} 0
+etherpad_ueberdb_writes{state="to_db"} 0
+etherpad_ueberdb_writes{state="to_db_failed"} 0
+etherpad_ueberdb_writes{state="to_db_finished"} 0
+`,
+		},
+		{
+			statsJson: `{"httpStartTime":1616872986576,"memoryUsage":123133952,"memoryUsageHeap":35726848,"ueberdb_lockAwaits":0,"ueberdb_lockAcquires":0,"ueberdb_lockReleases":0,"ueberdb_reads":0,"ueberdb_readsFailed":0,"ueberdb_readsFinished":0,"ueberdb_readsFromCache":0,"ueberdb_readsFromDb":0,"ueberdb_readsFromDbFailed":0,"ueberdb_readsFromDbFinished":0,"ueberdb_writes":0,"ueberdb_writesFailed":0,"ueberdb_writesFinished":0,"ueberdb_writesObsoleted":0,"ueberdb_writesToDb":0,"ueberdb_writesToDbFailed":0,"ueberdb_writesToDbFinished":0,"totalUsers":0,"httpRequests":{"meter":{"mean":0,"count":0,"currentRate":0,"1MinuteRate":0,"5MinuteRate":0,"15MinuteRate":0},"histogram":{"min":null,"max":null,"sum":0,"variance":null,"mean":0,"stddev":null,"count":0,"median":null,"p75":null,"p95":null,"p99":null,"p999":null}}}`,
+			expected: `# HELP etherpad_memory_usage
+# TYPE etherpad_memory_usage gauge
+etherpad_memory_usage{type="total"} 123133952
+etherpad_memory_usage{type="heap"} 35726848
+# HELP etherpad_total_users
+# TYPE etherpad_total_users gauge
+etherpad_total_users 0
+# HELP etherpad_active_pads
+# TYPE etherpad_active_pads gauge
+etherpad_active_pads 0
+# HELP etherpad_http_requests
+# TYPE etherpad_http_requests counter
+etherpad_http_requests 0
+# HELP etherpad_connects
+# TYPE etherpad_connects gauge
+etherpad_connects 0
+# HELP etherpad_edits
+# TYPE etherpad_edits gauge
+etherpad_edits 0
+# HELP etherpad_ueberdb_locks
+# TYPE etherpad_ueberdb_locks gauge
+etherpad_ueberdb_locks{state="awaits"} 0
+etherpad_ueberdb_locks{state="acquires"} 0
+etherpad_ueberdb_locks{state="releases"} 0
+# HELP etherpad_ueberdb_reads
+# TYPE etherpad_ueberdb_reads gauge
+etherpad_ueberdb_reads 0
+etherpad_ueberdb_reads{state="failed"} 0
+etherpad_ueberdb_reads{state="finished"} 0
+etherpad_ueberdb_reads{state="from_cache"} 0
+etherpad_ueberdb_reads{state="from_db"} 0
+etherpad_ueberdb_reads{state="from_db_failed"} 0
+etherpad_ueberdb_reads{state="from_db_finished"} 0
+# HELP etherpad_ueberdb_writes
+# TYPE etherpad_ueberdb_writes gauge
+etherpad_ueberdb_writes 0
+etherpad_ueberdb_writes{state="failed"} 0
+etherpad_ueberdb_writes{state="finished"} 0
+etherpad_ueberdb_writes{state="obsoleted"} 0
+etherpad_ueberdb_writes{state="to_db"} 0
+etherpad_ueberdb_writes{state="to_db_failed"} 0
+etherpad_ueberdb_writes{state="to_db_finished"} 0
 `,
 		},
 	}
