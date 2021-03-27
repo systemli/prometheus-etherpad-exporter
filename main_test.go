@@ -39,9 +39,15 @@ etherpad_http_requests 15
 # HELP etherpad_connects
 # TYPE etherpad_connects gauge
 etherpad_connects 1
+# HELP etherpad_disconnects
+# TYPE etherpad_disconnects gauge
+etherpad_connects 0
 # HELP etherpad_edits
 # TYPE etherpad_edits gauge
 etherpad_edits 3
+# HELP etherpad_failed_changesets
+# TYPE etherpad_failed_changesets gauge
+etherpad_failed_changesets 0
 # HELP etherpad_ueberdb_locks
 # TYPE etherpad_ueberdb_locks gauge
 etherpad_ueberdb_locks{state="awaits"} 0
@@ -85,9 +91,15 @@ etherpad_http_requests 0
 # HELP etherpad_connects
 # TYPE etherpad_connects gauge
 etherpad_connects 0
+# HELP etherpad_disconnects
+# TYPE etherpad_disconnects gauge
+etherpad_connects 0
 # HELP etherpad_edits
 # TYPE etherpad_edits gauge
 etherpad_edits 0
+# HELP etherpad_failed_changesets
+# TYPE etherpad_failed_changesets gauge
+etherpad_failed_changesets 0
 # HELP etherpad_ueberdb_locks
 # TYPE etherpad_ueberdb_locks gauge
 etherpad_ueberdb_locks{state="awaits"} 0

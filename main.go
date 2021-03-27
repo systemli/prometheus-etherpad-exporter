@@ -25,7 +25,9 @@ type etherpadStats struct {
 	PendingEdits               int          `json:"pendingEdits"`
 	HttpRequests               httpRequests `json:"httpRequests"`
 	Connects                   meter        `json:"connects"`
+	Disconnects                meter        `json:"disconnects"`
 	Edits                      edits        `json:"edits"`
+	FailedChangesets           meter        `json:"failedChangesets"`
 	UeberdbLockAwaits          int          `json:"ueberdb_lockAwaits"`
 	UeberdbLockAcquires        int          `json:"ueberdb_lockAcquires"`
 	UeberdbLockReleases        int          `json:"ueberdb_lockReleases"`
@@ -105,9 +107,15 @@ etherpad_http_requests {{.HttpRequests.Meter.Count}}
 # HELP etherpad_connects
 # TYPE etherpad_connects gauge
 etherpad_connects {{.Connects.Count}}
+# HELP etherpad_disconnects
+# TYPE etherpad_disconnects gauge
+etherpad_connects {{.Disconnects.Count}}
 # HELP etherpad_edits
 # TYPE etherpad_edits gauge
 etherpad_edits {{.Edits.Meter.Count}}
+# HELP etherpad_failed_changesets
+# TYPE etherpad_failed_changesets gauge
+etherpad_failed_changesets {{.FailedChangesets.Count}}
 # HELP etherpad_ueberdb_locks
 # TYPE etherpad_ueberdb_locks gauge
 etherpad_ueberdb_locks{state="awaits"} {{.UeberdbLockAwaits}}
