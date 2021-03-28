@@ -109,7 +109,7 @@ etherpad_http_requests {{.HttpRequests.Meter.Count}}
 etherpad_connects {{.Connects.Count}}
 # HELP etherpad_disconnects
 # TYPE etherpad_disconnects gauge
-etherpad_connects {{.Disconnects.Count}}
+etherpad_disconnects {{.Disconnects.Count}}
 # HELP etherpad_edits
 # TYPE etherpad_edits gauge
 etherpad_edits {{.Edits.Meter.Count}}

@@ -41,7 +41,7 @@ etherpad_http_requests 15
 etherpad_connects 1
 # HELP etherpad_disconnects
 # TYPE etherpad_disconnects gauge
-etherpad_connects 0
+etherpad_disconnects 0
 # HELP etherpad_edits
 # TYPE etherpad_edits gauge
 etherpad_edits 3
@@ -93,7 +93,7 @@ etherpad_http_requests 0
 etherpad_connects 0
 # HELP etherpad_disconnects
 # TYPE etherpad_disconnects gauge
-etherpad_connects 0
+etherpad_disconnects 0
 # HELP etherpad_edits
 # TYPE etherpad_edits gauge
 etherpad_edits 0
