@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 	"text/template"
+	"time"
 
 	log "github.com/sirupsen/logrus"
 )
@@ -174,7 +175,8 @@ func (h handler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	}
 
 	if h.etherpadAPIToken != "" {
-		res, err := http.Get(h.etherpadURL + fmt.Sprintf("/api/1.2.14/getStats?apikey=%s", h.etherpadAPIToken))
+		client := http.Client{Timeout: time.Second * 120}
+		res, err := client.Get(h.etherpadURL + fmt.Sprintf("/api/1.2.14/getStats?apikey=%s", h.etherpadAPIToken))
 		if err != nil {
 			log.WithError(err).Error("error while fetching /getStats from etherpad api")
 		}
