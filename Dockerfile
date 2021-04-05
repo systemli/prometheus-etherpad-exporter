@@ -1,4 +1,4 @@
-FROM alpine:3.13.3 as builder
+FROM alpine:3.13.4 as builder
 
 WORKDIR /go/src/github.com/systemli/prometheus-etherpad-exporter
 
