@@ -7,8 +7,7 @@ Prometheus Exporter for Etherpad written in Go.
 ## Usage
 
 ```
-go get github.com/systemli/prometheus-etherpad-exporter
-go install github.com/systemli/prometheus-etherpad-exporter
+go install github.com/systemli/prometheus-etherpad-exporter@latest
 $GOPATH/bin/prometheus-etherpad-exporter
 ```
 
