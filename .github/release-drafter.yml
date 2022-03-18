@@ -1,3 +1,5 @@
+name-template: '$RESOLVED_VERSION'
+tag-template: '$RESOLVED_VERSION'
 categories:
   - title: '🚀 Features'
     labels:
@@ -12,12 +14,28 @@ categories:
     labels:
       - 'chore'
       - 'dependencies'
+version-resolver:
+  major:
+    labels:
+      - 'feature'
+  minor:
+    labels:
+      - 'enhancement'
+  patch:
+    labels:
+      - 'fix'
+      - 'bugfix'
+      - 'bug'
+      - 'chore'
+      - 'dependencies'
+  default: patch
 template: |
   ## Changes
   
   $CHANGES
   
   **Full Changelog**: https://github.com/$OWNER/$REPOSITORY/compare/$PREVIOUS_TAG...$RESOLVED_VERSION
+
   ## Docker
   
   - `docker pull systemli/prometheus-etherpad-exporter:$RESOLVED_VERSION`
