@@ -4,7 +4,7 @@ go 1.26
 
 require (
 	github.com/google/go-cmp v0.7.0
-	github.com/sirupsen/logrus v1.9.4
+	github.com/sirupsen/logrus v1.10.0
 )
 
 require golang.org/x/sys v0.13.0 // indirect
